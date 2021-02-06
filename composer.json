@@ -1,0 +1,26 @@
+{
+  "name": "brbunny/brplates",
+  "description": "BrPlates is a component for handling view layer using Plates",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kevin Santos",
+      "email": "kevinsiqueira.dev@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "BrBunny\\BrPlates\\": "src"
+    }
+  },
+  "require": {
+    "php": "^7.2",
+    "ext-pdo": "*",
+    "league/plates": "3.4.*"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*"
+  }
+}
