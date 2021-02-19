@@ -50,7 +50,7 @@ class Controller
 }
 ```
 
-##### setFunction
+##### function
 
 _Create a unique function for a specific use._
 
@@ -60,12 +60,12 @@ Criar uma função única para um caso específico.
 <?php
 
 // Register a one-off function
-$this->view->setFunction("name", function ($params) {
+$this->view->function("name", function ($params) {
     // Type Code
 });
 ```
 
-##### addTemplate and removeTemplate
+##### path and removePath
 
 _Group your models in different namespaces._
 
@@ -75,13 +75,13 @@ Agrupe seus modelos em diferentes namespaces.
 <?php
 
 // Get template from another directory
-$this->view->addTemplate("profile", "./theme/profile");
+$this->view->path("profile", "./theme/profile");
 
 //Use template
 $this->view->show("profile::profile", ["user" => "Jow User"]);
 
 // Remove template added
-$this->view->removeTemplate("profile");
+$this->view->removePath("profile");
 ```
 
 ##### data
@@ -97,15 +97,15 @@ $this->view->data(['company' => 'BrPlates'], ["_theme", "home"]);
 $this->view->data(['company' => 'BrPlates']); // Template is Optional
 ```
 
-##### catch
+##### render
 
-_If you want to store the model in a variable, use the `catch()` function. If you want to render the model directly, use the `show()` function._
+_If you want to store the model in a variable, use the `render()` function. If you want to render the model directly, use the `show()` function._
 
-Se deseja armazenar o modelo em uma variável, utilize a função `catch()`. Já se quiser renderizar o modelo direto utilize a função `show()`.
+Se deseja armazenar o modelo em uma variável, utilize a função `render()`. Já se quiser renderizar o modelo direto utilize a função `show()`.
 
 ```php
 <?php
-$template = $view->catch("_theme", ["user" => "Jow User"]);
+$template = $view->render("_theme", ["user" => "Jow User"]);
 echo $template;
 
 $this->view->show("_theme", ["user" => "Jow User"]);
