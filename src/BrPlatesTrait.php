@@ -64,7 +64,7 @@ trait BrPlatesTrait
      */
     public function show(string $name, array $data = []): BrPlates
     {
-        echo $this->catch($name, $data);
+        echo $this->render($name, $data);
         return $this;
     }
 
