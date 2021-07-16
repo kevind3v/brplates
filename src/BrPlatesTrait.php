@@ -4,7 +4,7 @@ namespace BrBunny\BrPlates;
 
 trait BrPlatesTrait
 {
-     /**
+    /**
      * @param string $name
      * @param string $path
      * @return BrPlates
@@ -75,5 +75,32 @@ trait BrPlatesTrait
     public function isset(string $name): bool
     {
         return $this->engine->exists($name) ?? false;
+    }
+
+    /**
+     * @param string $name
+     * @param array $data
+     * @return BrPlates
+     */
+    public function renderMinify(string $name, array $data = []): string
+    {
+        $code = $this->render($name, $data);
+        $search = array(
+
+            // Remove whitespaces after tags
+            '/\>[^\S ]+/s',
+
+            // Remove whitespaces before tags
+            '/[^\S ]+\</s',
+
+            // Remove multiple whitespace sequences
+            '/(\s)+/s',
+
+            // Removes comments
+            '/<!--(.|\s)*?-->/'
+        );
+        $replace = array('>', '<', '\\1');
+        $code = preg_replace($search, $replace, $code);
+        return $code;
     }
 }

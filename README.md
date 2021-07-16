@@ -124,6 +124,18 @@ if ($this->view->isset("_theme")) {
 }
 ```
 
+##### renderMinify
+
+_Reduce code to render._
+
+Reduzir código para renderização.
+
+```php
+<?php
+
+echo $view->renderMinify("profile::profile", ["user" => "Jow User"]);
+```
+
 ### Credits
 
 - [Kevin S. Siqueira](https://github.com/kevind3v) (Developer of this library)

@@ -1,7 +1,7 @@
 <?php
 
-$this->layout("_theme", ["title" => "Profile User"]) ?>
-<?=$company ?>
+$this->layout("_theme", ["title" => "Profile User", "company" => $company]) ?>
+<?= $company ?>
 <h2>You Profile</h2>
 <p>Hello, <?= $user ?></p>
 <br>
