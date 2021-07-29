@@ -2,6 +2,8 @@
 
 namespace BrBunny\BrPlates;
 
+use MatthiasMullie\Minify\JS;
+
 trait BrPlatesTrait
 {
     /**
@@ -85,6 +87,7 @@ trait BrPlatesTrait
     public function renderMinify(string $name, array $data = []): string
     {
         $code = $this->render($name, $data);
+
         $search = array(
 
             // Remove whitespaces after tags
@@ -97,10 +100,29 @@ trait BrPlatesTrait
             '/(\s)+/s',
 
             // Removes comments
-            '/<!--(.|\s)*?-->/'
+            '/<!--(.|\s)*?-->/',
         );
+
+
         $replace = array('>', '<', '\\1');
+        $code = preg_replace('/\<script\>(.|\s)*?\<\/script\>/', $this->minJs($code), $code);
         $code = preg_replace($search, $replace, $code);
         return $code;
+    }
+
+    /**
+     * @param $code
+     * @return string
+     */
+    private function minJs($code)
+    {
+        preg_match_all('/\<script\>(.|\s)*?\<\/script\>/', $code, $scripts);
+
+        $search = ['/\<script\>/', '/\<\/script\>/'];
+        $minify = new JS();
+        foreach ($scripts[0] as $script) {
+            $minify->add(preg_replace($search, "", $script));
+        }
+        return "<script>{$minify->minify()}</script>";
     }
 }
