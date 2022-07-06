@@ -144,6 +144,9 @@ OBS: Para minimizar scripts js, coloque "js-mix" na abertura da tag script
 <script js-mix>
     alert('minify');
 </script>
+
+// Result
+<script>alert('minify');</script>
 ```
 
 ### Credits
