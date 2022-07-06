@@ -6,6 +6,6 @@ $this->layout("_theme", ["title" => "Profile User", "company" => $company]) ?>
 <p>Hello, <?= $user ?></p>
 <br>
 <p>To learn more visit <a target="_blank" href="https://platesphp.com/">PlatesPHP</a></p>
-<script>
+<script js-mix>
     alert('deu certo');
 </script>

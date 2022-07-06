@@ -88,25 +88,27 @@ trait BrPlatesTrait
     {
         $code = $this->render($name, $data);
 
-        $search = array(
+        $code = $this->getScripts($code);
 
-            // Remove whitespaces after tags
-            '/\>[^\S ]+/s',
-
-            // Remove whitespaces before tags
-            '/[^\S ]+\</s',
-
-            // Remove multiple whitespace sequences
-            '/(\s)+/s',
-
-            // Removes comments
-            '/<!--(.|\s)*?-->/',
-        );
-
-
+        $search = array('/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s','/<!--(.|\s)*?-->/',);
         $replace = array('>', '<', '\\1');
-        $code = preg_replace('/\<script\>(.|\s)*?\<\/script\>/', $this->minJs($code), $code);
         $code = preg_replace($search, $replace, $code);
+
+        return $code;
+    }
+
+    private function getScripts(string $code): string
+    {
+        $sPoint = "<script js-mix>";
+        $ePoint = "</script>";
+
+        while ($length = strpos($code, $sPoint)) {
+            $stringScript = substr($code, $length + strlen($sPoint));
+            $ePointLength = strpos($stringScript, $ePoint);
+            $afterScript = substr($stringScript, $ePointLength + strlen($ePoint));
+            $script = $this->minJs(substr($stringScript, 0, $ePointLength));
+            $code = (substr($code, 0, $length)) . "{$script}{$afterScript}";
+        }
         return $code;
     }
 
@@ -116,13 +118,8 @@ trait BrPlatesTrait
      */
     private function minJs($code)
     {
-        preg_match_all('/\<script\>(.|\s)*?\<\/script\>/', $code, $scripts);
-
-        $search = ['/\<script\>/', '/\<\/script\>/'];
         $minify = new JS();
-        foreach ($scripts[0] as $script) {
-            $minify->add(preg_replace($search, "", $script));
-        }
+        $minify->add($code);
         return "<script>{$minify->minify()}</script>";
     }
 }

@@ -13,7 +13,7 @@ BrPlates is a component for handling view layer using Plates
 BrPlates is available through Composer:
 
 ```sh
-"brbunny/brplates": "1.0.*"
+"brbunny/brplates": "1.2.*"
 ```
 
 or run
@@ -134,6 +134,16 @@ Reduzir código para renderização.
 <?php
 
 echo $view->renderMinify("profile::profile", ["user" => "Jow User"]);
+```
+
+_OBS: To minify js scripts, put "js-mix" in the opening of the script tag_
+
+OBS: Para minimizar scripts js, coloque "js-mix" na abertura da tag script
+
+```php
+<script js-mix>
+    alert('minify');
+</script>
 ```
 
 ### Credits
