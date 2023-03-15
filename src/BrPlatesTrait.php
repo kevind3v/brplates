@@ -9,6 +9,7 @@ trait BrPlatesTrait
     /**
      * @param string $name
      * @param string $path
+     * @param bool $fallback
      * @return BrPlates
      */
     public function path(string $name, string $path, bool $fallback = false): BrPlates
@@ -32,7 +33,7 @@ trait BrPlatesTrait
      * @param callback $function
      * @return BrPlates
      */
-    public function function(string $name, $function): BrPlates
+    public function function(string $name, callable $function): BrPlates
     {
         $this->engine->registerFunction($name, $function);
         return $this;
@@ -40,10 +41,10 @@ trait BrPlatesTrait
 
     /**
      * @param array $data
-     * @param string $template
+     * @param string|null $template
      * @return BrPlates
      */
-    public function data(array $data, $template = null): BrPlates
+    public function data(array $data, string $template = null): BrPlates
     {
         $this->engine->addData($data, $template);
         return $this;
@@ -82,7 +83,7 @@ trait BrPlatesTrait
     /**
      * @param string $name
      * @param array $data
-     * @return BrPlates
+     * @return string
      */
     public function renderMinify(string $name, array $data = []): string
     {
@@ -90,11 +91,9 @@ trait BrPlatesTrait
 
         $code = $this->getScripts($code);
 
-        $search = array('/\>[^\S ]+/s','/[^\S ]+\</s','/(\s)+/s','/<!--(.|\s)*?-->/',);
+        $search = array('/>[^\S ]+/', '/[^\S ]+</', '/(\s)+/','/<!--(.|\s)*?-->/',);
         $replace = array('>', '<', '\\1');
-        $code = preg_replace($search, $replace, $code);
-
-        return $code;
+        return preg_replace($search, $replace, $code);
     }
 
     private function getScripts(string $code): string
@@ -107,7 +106,7 @@ trait BrPlatesTrait
             $ePointLength = strpos($stringScript, $ePoint);
             $afterScript = substr($stringScript, $ePointLength + strlen($ePoint));
             $script = $this->minJs(substr($stringScript, 0, $ePointLength));
-            $code = (substr($code, 0, $length)) . "{$script}{$afterScript}";
+            $code = (substr($code, 0, $length)) . "$script$afterScript";
         }
         return $code;
     }
@@ -116,7 +115,7 @@ trait BrPlatesTrait
      * @param $code
      * @return string
      */
-    private function minJs($code)
+    private function minJs($code): string
     {
         $minify = new JS();
         $minify->add($code);
