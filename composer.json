@@ -16,7 +16,7 @@
     }
   },
   "require": {
-    "php": "^7.2",
+    "php": ">=7.2",
     "ext-pdo": "*",
     "league/plates": "3.*",
     "matthiasmullie/minify": "1.*"
