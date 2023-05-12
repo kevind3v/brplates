@@ -14,6 +14,8 @@ $view->function("asset", function (string $path) {
 
 // Get template from another directory
 $view->path("profile", "./theme/profile");
+$view->path("widgets", "./theme/widgets");
+
 // $view->removeTemplate("profile");
 
 // Preassign data to the layout [https://platesphp.com/engine/folders/]

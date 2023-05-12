@@ -124,6 +124,69 @@ if ($this->view->isset("_theme")) {
 }
 ```
 
+##### widget
+
+_If you want to create a tree of components, use the `widget()` method._
+Se você deseja criar uma árvore de componentes, utilize o método `widget()`
+
+```php
+/*
+Content of the widgets::list template:
+
+<ul>
+    <?= $this->section('widgets') ?>
+</ul>
+*/
+<?= $this->widget("widgets::list", [/* Items */])  ?>
+
+// Example
+<?= $this->widget("widgets::list", [
+    $this->child("widgets::item", ["content" => "Text"]),
+    $this->child("widgets::item", ["content" => "Text2"]),
+    $this->children("widgets::list2", [
+        $this->child("widgets::item", ["content" => "Text3.1"]),
+    ], ["label" => "Text3"])
+])  ?>
+```
+
+##### children
+
+_If you have a component that has child components, and that same component contains `data`, use `children()._
+Se existe um componente que possui componentes filhos, e esse mesmo componente contem `data` utilize `children()`
+
+```php
+
+/*
+Content of the widgets::children template:
+
+<li>
+    <?= $label ?>
+    <ul>
+        <?= $this->section('widgets') ?>
+    </ul>
+</li>
+*/
+$this->children("widgets::list2", [
+        $this->child("widgets::item", ["content" => "Text1.1"]),
+], ["label" => "Text1"]);
+```
+
+##### child
+
+_If the component doesn't have any children, use `child()`_
+Se o componente não tiver filhos, utilize `child()`
+
+```php
+
+/*
+Content of the widgets::item template:
+
+<li><?= $content ?></li>
+*/
+$this->child("widgets::item", ["content" => "Text"]);
+```
+
+
 ##### renderMinify
 
 _Reduce code to render._
@@ -142,6 +205,7 @@ OBS: Para minimizar scripts js, coloque "js-mix" na abertura da tag script
 
 ```php
 <script js-mix>
+    // Alert
     alert('minify');
 </script>
 

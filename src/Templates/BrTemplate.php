@@ -8,40 +8,32 @@ use Throwable;
 
 class BrTemplate extends Template
 {
-
     /**
      * Represents the main component that contains child components.
      * @param string $name
-     * @param array $chields
-     * @param array $data
+     * @param array $children
      * @return string
      * @throws Throwable
      */
-    public function widget(string $name, array $chields = [], array $data = []): string
+    public function widget(string $name, array $children = []): string
     {
-        $layout = $this->engine->make($name);
-        if (!empty($chields)) {
-            $content = "";
-            foreach ($chields as $child) {
-                $content .= $child . PHP_EOL;
-            }
-            $layout->sections = array_merge($this->sections, array('widgets' => $content));
-        }
-        return $layout->render($data);
+        $layout = $this->orderChildren($name, $children);
+        return $layout->render();
     }
 
 
     /**
      * Represents a leaf component that doesn't have any children.
      * @param string $name
-     * @param array $chields
+     * @param array $children
      * @param array $data
      * @return string
      * @throws Throwable
      */
-    public function chields(string $name, array $chields = [], array $data = []): string
+    public function children(string $name, array $children = [], array $data = []): string
     {
-        return $this->widget($name, $chields, $data);
+        $layout = $this->orderChildren($name, $children);
+        return $layout->render($data);
     }
 
     /**
@@ -53,5 +45,23 @@ class BrTemplate extends Template
     public function child(string $name, array $data = array()) : string
     {
         return $this->engine->render($name, $data);
+    }
+
+    /**
+     * @param string $name
+     * @param array $children
+     * @return Template
+     */
+    private function orderChildren(string $name, array $children = []): Template
+    {
+        $layout = $this->engine->make($name);
+        if (!empty($children)) {
+            $content = "";
+            foreach ($children as $child) {
+                $content .= $child . PHP_EOL;
+            }
+            $layout->sections = array_merge($this->sections, array('widgets' => $content));
+        }
+        return $layout;
     }
 }
