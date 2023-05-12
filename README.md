@@ -114,6 +114,7 @@ $this->view->show("_theme", ["user" => "Jow User"]);
 ##### isset
 
 _To check if a model exists, simply use the `isset()` function._
+
 Para verificar se um modelo existe, basta utilizar a função `isset()`
 
 ```php
@@ -126,8 +127,9 @@ if ($this->view->isset("_theme")) {
 
 ##### widget
 
-_If you want to create a tree of components, use the `widget()` method._
-Se você deseja criar uma árvore de componentes, utilize o método `widget()`
+_If you want to create a tree of components, use the `widget()`_
+
+Se você deseja criar uma árvore de componentes, utilize `widget()`
 
 ```php
 /*
@@ -151,7 +153,8 @@ Content of the widgets::list template:
 
 ##### children
 
-_If you have a component that has child components, and that same component contains `data`, use `children()._
+_If you have a component that has child components, and that same component contains `data`, use `children()`_
+
 Se existe um componente que possui componentes filhos, e esse mesmo componente contem `data` utilize `children()`
 
 ```php
@@ -174,6 +177,7 @@ $this->children("widgets::list2", [
 ##### child
 
 _If the component doesn't have any children, use `child()`_
+
 Se o componente não tiver filhos, utilize `child()`
 
 ```php
