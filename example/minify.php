@@ -1,6 +1,6 @@
 <?php
 
-require "../vendor/autoload.php";
+require __DIR__ . "/../vendor/autoload.php";
 
 use BrBunny\BrPlates\BrPlates;
 
@@ -9,7 +9,7 @@ $view = new BrPlates("./theme");
 
 // Register a one-off function [https://platesphp.com/engine/functions/]
 $view->function("asset", function (string $path) {
-    return "http://localhost/brPlates/example/theme/{$path}";
+    return "/theme/{$path}";
 });
 
 // Get template from another directory
