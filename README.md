@@ -13,7 +13,7 @@ BrPlates is a component for handling view layer using Plates
 BrPlates is available through Composer:
 
 ```sh
-"brbunny/brplates": "1.2.*"
+"brbunny/brplates": "1.4.*"
 ```
 
 or run
