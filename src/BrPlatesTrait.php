@@ -44,7 +44,7 @@ trait BrPlatesTrait
      * @param string|null $template
      * @return BrPlates
      */
-    public function data(array $data, string $template = null): BrPlates
+    public function data(array $data, ?string $template = null): BrPlates
     {
         $this->engine->addData($data, $template);
         return $this;
@@ -77,7 +77,7 @@ trait BrPlatesTrait
      */
     public function isset(string $name): bool
     {
-        return $this->engine->exists($name) ?? false;
+        return $this->engine->exists($name);
     }
 
     /**
@@ -91,9 +91,23 @@ trait BrPlatesTrait
 
         $code = $this->getScripts($code);
 
-        $search = array('/>[^\S ]+/', '/[^\S ]+</', '/(\s)+/','/<!--(.|\s)*?-->/',);
-        $replace = array('>', '<', '\\1');
-        return preg_replace($search, $replace, $code);
+        // Blocks whose whitespace matters (e.g. "//" comments in JS) are kept out of the HTML minification
+        $blocks = [];
+        $code = preg_replace_callback(
+            '/<(script|style|pre|textarea)\b[^>]*>.*?<\/\1>/is',
+            function (array $match) use (&$blocks): string {
+                $key = "@@BRPLATES_BLOCK_" . count($blocks) . "@@";
+                $blocks[$key] = $match[0];
+                return $key;
+            },
+            $code
+        );
+
+        $search = array('/<!--.*?-->/s', '/>[^\S ]+/', '/[^\S ]+</', '/(\s)+/');
+        $replace = array('', '>', '<', '\\1');
+        $code = preg_replace($search, $replace, $code);
+
+        return strtr($code, $blocks);
     }
 
     private function getScripts(string $code): string
@@ -101,7 +115,7 @@ trait BrPlatesTrait
         $sPoint = "<script js-mix>";
         $ePoint = "</script>";
 
-        while ($length = strpos($code, $sPoint)) {
+        while (($length = strpos($code, $sPoint)) !== false) {
             $stringScript = substr($code, $length + strlen($sPoint));
             $ePointLength = strpos($stringScript, $ePoint);
             $afterScript = substr($stringScript, $ePointLength + strlen($ePoint));
